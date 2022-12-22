@@ -16,11 +16,19 @@ class _TodoDetailsState extends State<TodoDetails> {
     return Row(
       children: [
         Expanded(
-          flex: 3,
-          child: Text(title),
+          flex: 1,
+          child:
+          Text(title,
+              style: const TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold)
+          )
         ),
         const SizedBox(width: 5),
-        Text(value.toString())
+        Flexible(child: Text(value.toString(),
+        textAlign: TextAlign.justify,
+        style: const TextStyle(fontSize: 20))
+        )
       ],
     );
   }
@@ -34,11 +42,11 @@ class _TodoDetailsState extends State<TodoDetails> {
       body:  ListView(
         padding: const EdgeInsets.all(15),
         children: [
-          rowItem("Title", widget.todos.title),
+          rowItem("Title:",(widget.todos.title)),
           const SizedBox(height: 10),
-          rowItem("Details", widget.todos.details),
+          rowItem("Details:", widget.todos.details),
           const SizedBox(height: 10),
-          rowItem("Completed", widget.todos.completed)
+          rowItem("Completed:", widget.todos.completed)
         ],
       ),
     );

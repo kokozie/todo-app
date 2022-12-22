@@ -13,8 +13,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List todos = <dynamic>[];
 
+  List todos = <dynamic>[];
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +22,7 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: const Text('Todo'),
         elevation: 4,
+        backgroundColor: Colors.black38,
       ),
       body: Center(
         child: FutureBuilder<List<TodoModel>>(
@@ -31,61 +32,57 @@ class _HomePageState extends State<HomePage> {
               todos = snapshot.data!;
               return ListView.builder(
                 itemCount: todos.length,
-                itemBuilder: (context,index){
+                  itemBuilder: (context,index){
                   final todo = todos[index];
                   return Dismissible(
-                    key: UniqueKey(),
-                    onDismissed: (direction){
+                      key: UniqueKey(),
+                      onDismissed: (direction){
                       setState(() {
                         todos.removeAt(index);
                         DatabaseHelper.instance.remove(todo.id);
                       });
                       ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Todo Deleted!')));
-                    },
-                    child: ListTile(
-                      title: Text(todo.title),
-                      subtitle: Text(todo.details),
-                      trailing: ElevatedButton(
-                        onPressed: ()async{
-                          var updateTodo = await Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => UpdateTodo(updateTodo:todo))
-                          );
-                          await DatabaseHelper.instance.update(updateTodo);
-                          setState(() {
-                            todos[index] = updateTodo;
-                          });
-                        },
-                        child: const Text('Update'),
-                      ),
-                      onTap: (){
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) =>
-                             TodoDetails(todos: todo))
-                        );
+                          const SnackBar(content: Text('Todo Deleted')));
                       },
-                    ),
+                      child: Card(
+                        child:ListTile(
+                          title: Text(todo.title),
+                          tileColor: Colors.white10,
+                          subtitle: Text('Done todo: ${todo.completed}'),
+                          trailing: ElevatedButton(
+                              onPressed: ()async{
+                                var updateTodo = await Navigator.push(
+                                    context, MaterialPageRoute(builder: (context) =>
+                                    UpdateTodo(updateTodo:todo)));
+                                await DatabaseHelper.instance.update(updateTodo);
+                                setState(() {todos[index] = updateTodo;});
+                                },
+                              child: const Text('Update')),
+                          onTap: (){
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) =>
+                                    TodoDetails(todos: todo)));
+                            },
+                        ),
+                      )
                   );
-                },
+                }
               );
             }
             return const Center(child: Icon(Icons.close));
-          },
+            },
         ),
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: ()async{
-          var result = await Navigator.push(
-              context,
+          var result = await Navigator.push(context,
               MaterialPageRoute(builder: (context) => const AddTodo())
           );
           setState(() {
             todos.add(result);
           });
-        },
+          },
       ),
     );
   }

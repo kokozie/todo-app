@@ -4,7 +4,7 @@ import 'db/database_helper.dart';
 
 
 const List<String> completed = <String>[
-  'No',
+  'Not yet',
   'Yes',
 ];
 class AddTodo extends StatefulWidget {
@@ -37,15 +37,16 @@ class _AddTodoState extends State<AddTodo> {
       ),
       body: Form(
         key: formKey,
-        autovalidateMode: AutovalidateMode.onUserInteraction,
         child: ListView(
           padding: const EdgeInsets.all(20),
           children: [
-            const SizedBox(height: 20),
             TextFormField(
+
               controller: titleText,
+              style: const TextStyle(fontWeight: FontWeight.bold),
               keyboardType: TextInputType.name,
               decoration: const InputDecoration(
+                border: OutlineInputBorder(),
                 hintText: 'Ex: Jogging',
                 labelText: 'Title',
               ),
@@ -57,9 +58,12 @@ class _AddTodoState extends State<AddTodo> {
             TextFormField(
               controller: detailsText,
               keyboardType: TextInputType.name,
+              style: const TextStyle(fontWeight: FontWeight.bold),
               decoration: const InputDecoration(
+                border: OutlineInputBorder(),
                 hintText: 'Ex: 5AM at the street',
                 labelText: 'Details',
+
               ),
               validator: (name){
                 return (name == '') ? 'Please enter Details' : null;
@@ -85,7 +89,7 @@ class _AddTodoState extends State<AddTodo> {
             ),
             const SizedBox(height: 20),
             SizedBox(
-              height: 20,
+              height: 50,
               child: ElevatedButton(
                 onPressed: () async{
                   var validForm = formKey.currentState!.validate();
